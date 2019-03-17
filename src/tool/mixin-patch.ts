@@ -36,7 +36,3 @@ export async function patchProject(path:string){
     }
 }
 
-/* istanbul ignore if */
-if(require.main === module){
-    patchProject(process.cwd());
-}

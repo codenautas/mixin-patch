@@ -1,14 +1,15 @@
 {
   "name": "mixin-patch",
   "description": "Patch the mixin problem #28799",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "author": "Emilio Platzer <emilioplatzer@gmail.com>",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "bin": {
-    "mxini-patch": "./dist/tool/mixin-patch.js"
+    "mixin-patch": "./bin/mixin-patch-cli.js"
   },
   "repository": "emilioplatzer/mixin-patch",
   "contributors": [
@@ -48,7 +49,7 @@
     "test": "mocha --reporter spec --bail --check-leaks --exit work/test/",
     "test-ci": "node node_modules/nyc/bin/nyc --reporter=lcov --reporter=text-lcov node_modules/mocha/bin/_mocha --exit --check-leaks work/test/*.js",
     "test-cov": "nyc node_modules/mocha/bin/_mocha --exit --check-leaks work/test/*.js",
-    "build": "tsc -p tsconfig-tool.json && tsc -p tsconfig-test.json",
+    "build": "tsc -p tsconfig-tool.json && tsc -p tsconfig-test.json & npm run build:bin",
     "build-without-err": "(tsc -p tsconfig-tool.json || echo \"continue w/error\") && (tsc -p tsconfig-test.json  || echo \"continue w/error\")"
   },
   "nyc": {
