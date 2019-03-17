@@ -3,8 +3,10 @@
 import * as fs from "fs-extra";
 import * as Path from "path";
 
+export var badLineDetectorRegex=/^(\s+)([A-Za-z0-9_ö]+:\s*\([^;]*\) => [^;]*;\s*)$/mg;
+
 export function patchCode(code:string){
-    return code.replace(/^(\s+)([A-Za-z0-9_ö]+:\s*\([^;]*\) => [^;]*;\s*)$/mg, function(_all, margin, rest ){
+    return code.replace(badLineDetectorRegex, function(_all, margin, rest ){
         return margin+'// mixin-patch: '+rest;
     });
 }
