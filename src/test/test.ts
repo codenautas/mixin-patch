@@ -26,6 +26,7 @@ describe('mixin-patch', function(){
         compareFiles(`${PATH}/out-app-datos-ext.d.ts`,`${PATH}/local-app-datos-ext.d.ts`);
     });
     it('patch a project', async function(){
+        await fs.ensureDir(`${PATH}/src`)
         await fs.copy(`${PATH}/in-app-datos-ext.d.ts`, `project4test/dist/server/app-datos-ext.d.ts`);
         await fs.copy(`${PATH}/in-app-datos-ext.d.ts`, `project4test/other/app-datos-ext.d.ts`);
         await fs.copy(`${PATH}/in-app-datos-ext.d.ts`, `project4test/none/app-datos-ext.d.ts`);
@@ -34,4 +35,27 @@ describe('mixin-patch', function(){
         await compareFiles(`${PATH}/out-app-datos-ext.d.ts`, `project4test/other/app-datos-ext.d.ts`);
         await compareFiles(`${PATH}/in-app-datos-ext.d.ts` , `project4test/none/app-datos-ext.d.ts`);
     })
+});
+
+describe('copy codenautas dist', function(){
+    it('copies /src/client/** into /dist/client/**', async function(){
+        await fs.remove('local-project');
+        await fs.ensureDir('local-project/dist')
+        await fs.ensureDir('local-project/src/client/img')
+        await fs.ensureDir('local-project/src/client/css')
+        await fs.ensureDir('local-project/src/unlogged/img')
+        await fs.writeFile('local-project/src/client/img/uno.png'      ,'uno'   )
+        await fs.writeFile('local-project/src/client/css/dos.styl'     ,'dos'   )
+        await fs.writeFile('local-project/src/unlogged/img/tres.png'   ,'tres'  )
+        await fs.writeFile('local-project/src/unlogged/img/cuatro.jpeg','cuatro')
+        await fs.writeFile('local-project/src/unlogged/cinco.ts'       ,'cinco' )
+        await fs.writeJSON('local-project/package.json',{files:["dist"], "mixin-patch":true});
+        await patchProject('local-project');
+        await compareFiles('local-project/src/client/img/uno.png'      ,'local-project/dist/client/img/uno.png'      )
+        await compareFiles('local-project/src/client/css/dos.styl'     ,'local-project/dist/client/css/dos.styl'     )
+        await compareFiles('local-project/src/unlogged/img/tres.png'   ,'local-project/dist/unlogged/img/tres.png'   )
+        await compareFiles('local-project/src/unlogged/img/cuatro.jpeg','local-project/dist/unlogged/img/cuatro.jpeg')
+        var exists = fs.existsSync('local-project/dist/unlogged/cinco.ts');
+        discrepances.showAndThrow(exists, false);
+    });
 });

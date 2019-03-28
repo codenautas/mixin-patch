@@ -26,6 +26,22 @@ export async function patchPath(path:string){
     }
 }
 
+export async function copyDir(src:string, dest:string, filter:(name:string)=>boolean){
+    var dirs = await fs.readdir(src);
+    while(dirs.length){
+        var name = dirs.shift()!;
+        var srcPath=Path.join(src, name);
+        var destPath=Path.join(dest, name);
+        var stat = await fs.stat(srcPath);
+        if(stat.isDirectory()){
+            await fs.ensureDir(destPath);
+            await copyDir(srcPath, destPath, filter);
+        }else if(filter(name)){
+            await fs.copyFile(srcPath, destPath);
+        }
+    }
+}
+
 export async function patchProject(path:string){
     let packageJson = await fs.readJSON(Path.join(path,'package.json'));
     if(Array.isArray(packageJson.files)){
@@ -33,6 +49,11 @@ export async function patchProject(path:string){
             let dirname = element.replace(/\/\*\*.*$/g,'');
             await patchPath(Path.join(path, dirname));
         })); 
+    }
+    if(packageJson.files.includes("dist") && (packageJson["qa-control"] || packageJson["mixin-patch"])){
+        if(fs.existsSync(Path.join(path,"src"))){
+            await copyDir(Path.join(path,"src"), Path.join(path,"dist"), function filter(dir){ return !dir.endsWith('.ts') && dir!='config.json'});
+        }
     }
 }
 
