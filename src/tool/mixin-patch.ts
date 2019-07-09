@@ -12,7 +12,15 @@ export function patchCode(code:string){
 }
 
 export async function patchPath(path:string){
-    let stats = await fs.stat(path);
+    try{
+        var stats = await fs.stat(path);
+    }catch(err){
+        if(err.code=='ENOENT'){
+            throw new Error('Error in package.json in "files" entry. Can not find: '+path);
+        }else{
+            throw err;
+        }
+    }
     if(stats.isDirectory()){
         let dir = await fs.readdir(path);
         await Promise.all(dir.map(async function(pathFileOrDir){

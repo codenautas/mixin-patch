@@ -9,6 +9,7 @@
 import * as fs from 'fs-extra';
 import * as discrepances from "discrepances";
 import { patchCode, patchProject } from "../..";
+import * as Path from 'path';
 
 async function compareFiles(expectedFileName:string, obtainedFileName:string){
     var expected = await fs.readFile(expectedFileName,'utf8');
@@ -57,5 +58,24 @@ describe('copy codenautas dist', function(){
         await compareFiles('local-project/src/unlogged/img/cuatro.jpeg','local-project/dist/unlogged/img/cuatro.jpeg')
         var exists = fs.existsSync('local-project/dist/unlogged/cinco.ts');
         discrepances.showAndThrow(exists, false);
+    });
+    it('inform inexisting path in "files" entry', async function(){
+        await fs.remove('local-project');
+        await fs.ensureDir('local-project/dist')
+        await fs.ensureDir('local-project/src/client/img')
+        await fs.ensureDir('local-project/src/client/css')
+        await fs.ensureDir('local-project/src/unlogged/img')
+        await fs.writeFile('local-project/src/client/img/uno.png'      ,'uno'   )
+        await fs.writeFile('local-project/src/client/css/dos.styl'     ,'dos'   )
+        await fs.writeFile('local-project/src/unlogged/img/tres.png'   ,'tres'  )
+        await fs.writeFile('local-project/src/unlogged/img/cuatro.jpeg','cuatro')
+        await fs.writeFile('local-project/src/unlogged/cinco.ts'       ,'cinco' )
+        await fs.writeJSON('local-project/package.json',{files:["dist","inexisting"], "mixin-patch":true});
+        try{
+            await patchProject('local-project');
+            throw new Error('must throw')
+        }catch(err){
+            discrepances.showAndThrow(err.message,'Error in package.json in "files" entry. Can not find: local-project'+Path.sep+'inexisting');
+        }
     });
 });
