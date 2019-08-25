@@ -5,10 +5,26 @@ import * as Path from "path";
 
 export var badLineDetectorRegex=/^(\s+)([A-Za-z0-9_ö]+:\s*\([^;]*\) => [^;]*;\s*)$/mg;
 
-export function patchCode(code:string){
+export function patchCodeDts(code:string){
     return code.replace(badLineDetectorRegex, function(_all, margin, rest ){
         return margin+'// mixin-patch: '+rest;
     });
+}
+
+export function patchCodeJs(code:string){
+    return code.replace(/^"(#![^"]+)";(\r?\n)/, function(_all, hashbang, nl){
+        return hashbang+nl;
+    });
+}
+
+export async function patchIfNeeded(sufix:string, path:string, patcher:(code:string)=>string){
+    if(path.endsWith(sufix)){
+        let readedCode = await fs.readFile(path, 'utf8');
+        let patchedCode = patcher(readedCode);
+        if(readedCode!=patchedCode){
+            await fs.writeFile(path, patchedCode);
+        }
+    }
 }
 
 export async function patchPath(path:string){
@@ -27,10 +43,8 @@ export async function patchPath(path:string){
             await patchPath(Path.join(path,pathFileOrDir));
         }));
     }else if(stats.isFile()){
-        if(path.endsWith('.d.ts')){
-            let code = await fs.readFile(path, 'utf8');
-            await fs.writeFile(path, patchCode(code));
-        }
+        await patchIfNeeded('.d.ts',path,patchCodeDts);
+        await patchIfNeeded('.js'  ,path,patchCodeJs );
     }
 }
 
@@ -52,16 +66,16 @@ export async function copyDir(src:string, dest:string, filter:(name:string)=>boo
 
 export async function patchProject(path:string){
     let packageJson = await fs.readJSON(Path.join(path,'package.json'));
+    if(packageJson.files.includes("dist") && (packageJson["qa-control"] || packageJson["mixin-patch"])){
+        if(fs.existsSync(Path.join(path,"src"))){
+            await copyDir(Path.join(path,"src"), Path.join(path,"dist"), function filter(dir){ return !dir.endsWith('.ts') && dir!='config.json'});
+        }
+    }
     if(Array.isArray(packageJson.files)){
         await Promise.all(packageJson.files.map(async function(element:string){
             let dirname = element.replace(/\/\*\*.*$/g,'');
             await patchPath(Path.join(path, dirname));
         })); 
-    }
-    if(packageJson.files.includes("dist") && (packageJson["qa-control"] || packageJson["mixin-patch"])){
-        if(fs.existsSync(Path.join(path,"src"))){
-            await copyDir(Path.join(path,"src"), Path.join(path,"dist"), function filter(dir){ return !dir.endsWith('.ts') && dir!='config.json'});
-        }
     }
 }
 

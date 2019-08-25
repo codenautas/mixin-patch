@@ -8,7 +8,7 @@
 
 import * as fs from 'fs-extra';
 import * as discrepances from "discrepances";
-import { patchCode, patchProject } from "../..";
+import { patchCodeDts, patchCodeJs, patchProject } from "../..";
 import * as Path from 'path';
 
 async function compareFiles(expectedFileName:string, obtainedFileName:string){
@@ -22,9 +22,15 @@ var PATH='src/test/fixtures';
 describe('mixin-patch', function(){
     it('deletes member function', async function(){
         var code = await fs.readFile(`${PATH}/in-app-datos-ext.d.ts`, 'utf8');
-        var obtained = patchCode(code);
+        var obtained = patchCodeDts(code);
         await fs.writeFile(`${PATH}/local-app-datos-ext.d.ts`,obtained);
-        compareFiles(`${PATH}/out-app-datos-ext.d.ts`,`${PATH}/local-app-datos-ext.d.ts`);
+        await compareFiles(`${PATH}/out-app-datos-ext.d.ts`,`${PATH}/local-app-datos-ext.d.ts`);
+    });
+    it('honours shebang', async function(){
+        var code = await fs.readFile(`${PATH}/in-shebang.js`, 'utf8');
+        var obtained = patchCodeJs(code);
+        await fs.writeFile(`${PATH}/local-shebang.js`,obtained);
+        await compareFiles(`${PATH}/out-shebang.js`,`${PATH}/local-shebang.js`);
     });
     it('patch a project', async function(){
         await fs.ensureDir(`${PATH}/src`)
@@ -50,12 +56,15 @@ describe('copy codenautas dist', function(){
         await fs.writeFile('local-project/src/unlogged/img/tres.png'   ,'tres'  )
         await fs.writeFile('local-project/src/unlogged/img/cuatro.jpeg','cuatro')
         await fs.writeFile('local-project/src/unlogged/cinco.ts'       ,'cinco' )
+        await fs.writeFile('local-project/src/unlogged/seis.js'        ,'"#!/bin/node yes";\nconsole.log("yes");\n')
         await fs.writeJSON('local-project/package.json',{files:["dist"], "mixin-patch":true});
         await patchProject('local-project');
+        await fs.writeFile('local-project/src/unlogged/seis.js'        ,'#!/bin/node yes\nconsole.log("yes");\n')
         await compareFiles('local-project/src/client/img/uno.png'      ,'local-project/dist/client/img/uno.png'      )
         await compareFiles('local-project/src/client/css/dos.styl'     ,'local-project/dist/client/css/dos.styl'     )
         await compareFiles('local-project/src/unlogged/img/tres.png'   ,'local-project/dist/unlogged/img/tres.png'   )
         await compareFiles('local-project/src/unlogged/img/cuatro.jpeg','local-project/dist/unlogged/img/cuatro.jpeg')
+        await compareFiles('local-project/src/unlogged/seis.js'        ,'local-project/dist/unlogged/seis.js'        )
         var exists = fs.existsSync('local-project/dist/unlogged/cinco.ts');
         discrepances.showAndThrow(exists, false);
     });
