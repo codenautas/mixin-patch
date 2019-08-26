@@ -12,8 +12,8 @@ export function patchCodeDts(code:string){
 }
 
 export function patchCodeJs(code:string){
-    return code.replace(/^"(#![^"]+)";(\r?\n)/, function(_all, hashbang, nl){
-        return hashbang+nl;
+    return code.replace(/^("use strict";?\r?\n)?"(#![^"]+)";(\r?\n)/, function(_all, useStrict, hashbang, nl){
+        return hashbang+nl+(useStrict||'');
     });
 }
 

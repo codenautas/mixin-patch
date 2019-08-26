@@ -32,6 +32,12 @@ describe('mixin-patch', function(){
         await fs.writeFile(`${PATH}/local-shebang.js`,obtained);
         await compareFiles(`${PATH}/out-shebang.js`,`${PATH}/local-shebang.js`);
     });
+    it('honours shebang from ts', async function(){
+        var code = await fs.readFile(`${PATH}/in-shebang-from-ts.js`, 'utf8');
+        var obtained = patchCodeJs(code);
+        await fs.writeFile(`${PATH}/local-shebang-from-ts.js`,obtained);
+        await compareFiles(`${PATH}/out-shebang-from-ts.js`,`${PATH}/local-shebang-from-ts.js`);
+    });
     it('patch a project', async function(){
         await fs.ensureDir(`${PATH}/src`)
         await fs.copy(`${PATH}/in-app-datos-ext.d.ts`, `project4test/dist/server/app-datos-ext.d.ts`);

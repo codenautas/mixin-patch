@@ -1,7 +1,7 @@
 {
   "name": "mixin-patch",
   "description": "Patch the mixin problem #28799",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Emilio Platzer <emilioplatzer@gmail.com>",
   "license": "MIT",
   "files": [
