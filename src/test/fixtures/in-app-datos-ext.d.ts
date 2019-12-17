@@ -58,5 +58,13 @@ export declare function emergeAppDatosExt<T extends Constructor<AppOperativosTyp
         getClientSetupForSendToFrontEnd: ((req: Request) => import("backend-plus").ClientSetup) & ((req: Request) => import("backend-plus").ClientSetup);
         configList: (() => (string | object)[]) & (() => (string | object)[]);
         setStaticConfig: ((defConfigYamlString: string) => void) & ((defConfigYamlString: string) => void);
+        mainPage: ((req: {} | operativos.Request, offlineMode?: boolean | undefined, opts?: operativos.OptsClientPage | undefined) => {}) & ((req: {} | operativos.Request, offlineMode?: boolean | undefined, opts?: operativos.OptsClientPage | undefined) => {
+            toHtmlDoc: () => string;
+        });
+        isThisProcedureAllowed: (<T_2_1>(context: operativos.Context, procedureDef: operativos.ProcedureDef, params: {
+            [key: string]: T_2_1;
+        }) => Promise<boolean>) & (<T_4>(context: operativos.Context, procedureDef: operativos.ProcedureDef, params: {
+            [key: string]: T_4;
+        }) => Promise<boolean>);
     };
 } & T;

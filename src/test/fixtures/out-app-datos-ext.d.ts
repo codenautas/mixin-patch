@@ -11,12 +11,12 @@ export declare function emergeAppDatosExt<T extends Constructor<AppOperativosTyp
         allClientFileNames: import("backend-plus").ClientModuleDefinition[];
         tablasDatos: TablaDatos[];
         cargarGenerados(client: import("pg-promise-strict").Client): Promise<string>;
-        // mixin-patch: postConfig: (() => Promise<void>) & ((...params: any[]) => any);
+        /* mixin-patch: postConfig: (() => Promise<void>) & ((...params: any[]) => any); */
         getTableDefFunction(tableDef: import("backend-plus").TableDefinition): import("backend-plus").TableDefinitionFunction;
         loadTableDef(tableDef: import("backend-plus").TableDefinition): import("backend-plus").TableDefinitionFunction;
         generateAndLoadTableDef(tablaDatos: TablaDatos): import("backend-plus").TableDefinitionFunction;
-        // mixin-patch: getProcedures: (() => Promise<import("backend-plus").ProcedureDef[]>) & (() => Promise<import("backend-plus").ProcedureDef[]>);
-        // mixin-patch: getMenu: (() => import("operativos").MenuDefinition) & ((context?: import("backend-plus").Context) => import("backend-plus").MenuDefinition);
+        /* mixin-patch: getProcedures: (() => Promise<import("backend-plus").ProcedureDef[]>) & (() => Promise<import("backend-plus").ProcedureDef[]>); */
+        /* mixin-patch: getMenu: (() => import("operativos").MenuDefinition) & ((context?: import("backend-plus").Context) => import("backend-plus").MenuDefinition); */
         procedures: import("backend-plus").ProcedureDef[];
         procedure: {
             [key: string]: import("backend-plus").ProcedureDef;
@@ -29,19 +29,19 @@ export declare function emergeAppDatosExt<T extends Constructor<AppOperativosTyp
         db: typeof import("pg-promise-strict");
         config: any;
         rootPath: string;
-        // mixin-patch: start: ((opts?: import("backend-plus").StartOptions) => Promise<void>) & ((opts?: import("backend-plus").StartOptions) => Promise<void>);
-        // mixin-patch: getTables: (() => import("backend-plus").TableItemDef[]) & (() => import("backend-plus").TableItemDef[]);
-        // mixin-patch: appendToTableDefinition: ((tableName: string, appenderFunction: (tableDef: import("backend-plus").TableDefinition, context?: import("backend-plus").TableContext) => void) => void) & ((tableName: string, appenderFunction: (tableDef: import("backend-plus").TableDefinition, context?: import("backend-plus").TableContext) => void) => void);
-        // mixin-patch: getContext: ((req: Request) => import("backend-plus").Context) & ((req: Request) => import("backend-plus").Context);
-        // mixin-patch: addSchrödingerServices: ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void) & ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void);
-        // mixin-patch: addUnloggedServices: ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void) & ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void);
-        // mixin-patch: addLoggedServices: (() => void) & (() => void);
-        // mixin-patch: inDbClient: (<T_1>(req: Request, doThisWithDbClient: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>) & (<T_1>(req: Request, doThisWithDbClient: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>);
-        // mixin-patch: inTransaction: (<T_1>(req: Request, doThisWithDbTransaction: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>) & (<T_1>(req: Request, doThisWithDbTransaction: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>);
-        // mixin-patch: procedureDefCompleter: ((procedureDef: import("backend-plus").ProcedureDef) => import("backend-plus").ProcedureDef) & ((procedureDef: import("backend-plus").ProcedureDef) => import("backend-plus").ProcedureDef);
-        // mixin-patch: tableDefAdapt: ((tableDef: import("backend-plus").TableDefinition, context: import("backend-plus").Context) => import("backend-plus").TableDefinition) & ((tableDef: import("backend-plus").TableDefinition, context: import("backend-plus").Context) => import("backend-plus").TableDefinition);
-        // mixin-patch: pushApp: ((dirname: string) => void) & ((dirname: string) => void);
-        dumpDbSchemaPartial: ((partialTableStructures: import("backend-plus").TableDefinitions, opts?: {
+        /* mixin-patch: start: ((opts?: import("backend-plus").StartOptions) => Promise<void>) & ((opts?: import("backend-plus").StartOptions) => Promise<void>); */
+        /* mixin-patch: getTables: (() => import("backend-plus").TableItemDef[]) & (() => import("backend-plus").TableItemDef[]); */
+        /* mixin-patch: appendToTableDefinition: ((tableName: string, appenderFunction: (tableDef: import("backend-plus").TableDefinition, context?: import("backend-plus").TableContext) => void) => void) & ((tableName: string, appenderFunction: (tableDef: import("backend-plus").TableDefinition, context?: import("backend-plus").TableContext) => void) => void); */
+        /* mixin-patch: getContext: ((req: Request) => import("backend-plus").Context) & ((req: Request) => import("backend-plus").Context); */
+        /* mixin-patch: addSchrödingerServices: ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void) & ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void); */
+        /* mixin-patch: addUnloggedServices: ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void) & ((mainApp: import("backend-plus").ExpressPlus, baseUrl: string) => void); */
+        /* mixin-patch: addLoggedServices: (() => void) & (() => void); */
+        /* mixin-patch: inDbClient: (<T_1>(req: Request, doThisWithDbClient: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>) & (<T_1>(req: Request, doThisWithDbClient: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>); */
+        /* mixin-patch: inTransaction: (<T_1>(req: Request, doThisWithDbTransaction: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>) & (<T_1>(req: Request, doThisWithDbTransaction: (client: import("pg-promise-strict").Client) => Promise<T_1>) => Promise<T_1>); */
+        /* mixin-patch: procedureDefCompleter: ((procedureDef: import("backend-plus").ProcedureDef) => import("backend-plus").ProcedureDef) & ((procedureDef: import("backend-plus").ProcedureDef) => import("backend-plus").ProcedureDef); */
+        /* mixin-patch: tableDefAdapt: ((tableDef: import("backend-plus").TableDefinition, context: import("backend-plus").Context) => import("backend-plus").TableDefinition) & ((tableDef: import("backend-plus").TableDefinition, context: import("backend-plus").Context) => import("backend-plus").TableDefinition); */
+        /* mixin-patch: pushApp: ((dirname: string) => void) & ((dirname: string) => void); */
+        /* mixin-patch: dumpDbSchemaPartial: ((partialTableStructures: import("backend-plus").TableDefinitions, opts?: {
             complete?: boolean;
             skipEnance?: boolean;
         }) => Promise<{
@@ -53,10 +53,18 @@ export declare function emergeAppDatosExt<T extends Constructor<AppOperativosTyp
         }) => Promise<{
             mainSql: string;
             enancePart: string;
-        }>);
-        // mixin-patch: getContextForDump: (() => import("backend-plus").ContextForDump) & (() => import("backend-plus").ContextForDump);
-        // mixin-patch: getClientSetupForSendToFrontEnd: ((req: Request) => import("backend-plus").ClientSetup) & ((req: Request) => import("backend-plus").ClientSetup);
-        // mixin-patch: configList: (() => (string | object)[]) & (() => (string | object)[]);
-        // mixin-patch: setStaticConfig: ((defConfigYamlString: string) => void) & ((defConfigYamlString: string) => void);
+        }>); */
+        /* mixin-patch: getContextForDump: (() => import("backend-plus").ContextForDump) & (() => import("backend-plus").ContextForDump); */
+        /* mixin-patch: getClientSetupForSendToFrontEnd: ((req: Request) => import("backend-plus").ClientSetup) & ((req: Request) => import("backend-plus").ClientSetup); */
+        /* mixin-patch: configList: (() => (string | object)[]) & (() => (string | object)[]); */
+        /* mixin-patch: setStaticConfig: ((defConfigYamlString: string) => void) & ((defConfigYamlString: string) => void); */
+        /* mixin-patch: mainPage: ((req: {} | operativos.Request, offlineMode?: boolean | undefined, opts?: operativos.OptsClientPage | undefined) => {}) & ((req: {} | operativos.Request, offlineMode?: boolean | undefined, opts?: operativos.OptsClientPage | undefined) => {
+            toHtmlDoc: () => string;
+        }); */
+        /* mixin-patch: isThisProcedureAllowed: (<T_2_1>(context: operativos.Context, procedureDef: operativos.ProcedureDef, params: {
+            [key: string]: T_2_1;
+        }) => Promise<boolean>) & (<T_4>(context: operativos.Context, procedureDef: operativos.ProcedureDef, params: {
+            [key: string]: T_4;
+        }) => Promise<boolean>); */
     };
 } & T;
