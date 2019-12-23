@@ -48,6 +48,13 @@ describe('mixin-patch', function(){
         await compareFiles(`${PATH}/out-app-datos-ext.d.ts`, `project4test/other/app-datos-ext.d.ts`);
         await compareFiles(`${PATH}/in-app-datos-ext.d.ts` , `project4test/none/app-datos-ext.d.ts`);
     })
+    it('found a bug', async function(){
+        this.timeout(99999999);
+        var code = await fs.readFile(`${PATH}/in-bug-found.d.ts`, 'utf8');
+        var obtained = patchCodeDts(code);
+        await fs.writeFile(`${PATH}/local-bug-found.d.ts`,obtained);
+        await compareFiles(`${PATH}/out-bug-found.d.ts`,`${PATH}/local-bug-found.d.ts`);
+    });
 });
 
 describe('copy codenautas dist', function(){

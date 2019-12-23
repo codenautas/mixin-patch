@@ -3,7 +3,7 @@
 import * as fs from "fs-extra";
 import * as Path from "path";
 
-export var badLineDetectorRegex=/^(\s+)([A-Za-z0-9_ö]+:\s*\((.|\s)*?\) => (.|\s)*?\);)$/mg;
+export var badLineDetectorRegex=/^(        )([A-Za-z0-9_ö]+:\s*\((.|\s)*?\) => (.|\s)*?\);)$/mg;
 
 export function patchCodeDts(code:string){
     return code.replace(badLineDetectorRegex, function(_all, margin, rest ){
