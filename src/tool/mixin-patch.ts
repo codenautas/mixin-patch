@@ -67,8 +67,16 @@ export async function copyDir(src:string, dest:string, filter:(name:string)=>boo
 export async function patchProject(path:string){
     let packageJson = await fs.readJSON(Path.join(path,'package.json'));
     if(packageJson.files.includes("dist") && (packageJson["qa-control"] || packageJson["mixin-patch"])){
-        if(fs.existsSync(Path.join(path,"src"))){
-            await copyDir(Path.join(path,"src"), Path.join(path,"dist"), function filter(dir){ return !dir.endsWith('.ts') && dir!='config.json'});
+        var copyList = packageJson["mixin-patch"]?.copy
+        if(fs.existsSync(Path.join(path,"src")) || copyList){
+            for(var pair of (copyList || [{from:'src', to:'dist'}])){
+                try{
+                    await copyDir(Path.join(path,pair.from), Path.join(path,pair.to), function filter(dir){ return !dir.endsWith('.ts') && dir!='config.json'});
+                }catch(err){
+                    console.log('mixin-patch. ERROR copying',Path.join(path,pair.from),'to', Path.join(path,pair.to));
+                    throw err;
+                }
+            }
         }
     }
     if(Array.isArray(packageJson.files)){
