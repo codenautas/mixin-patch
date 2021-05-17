@@ -1,6 +1,17 @@
 "use strict";`-`
 
 import * as fs from "fs-extra";
+/*
+import {promises as fsNative} from "fs"
+var fs:typeof fsNative & {
+    ensureDir:(...a:any[])=>any
+    readJSON:(...a:any[])=>any
+    existsSync:(...a:any[])=>any
+} = fsExtra;
+// var fs = require("fs-extra");
+// import {promises as fs} from "fs";
+*/
+
 import * as Path from "path";
 
 export var badLineDetectorRegex=/^(        )([A-Za-z0-9_ö]+:\s*\((.|\s)*?\) => (.|\s)*?\);)$/mg;
@@ -39,7 +50,7 @@ export async function patchPath(path:string){
     }
     if(stats.isDirectory()){
         let dir = await fs.readdir(path);
-        await Promise.all(dir.map(async function(pathFileOrDir){
+        await Promise.all(dir.map(async function(pathFileOrDir:string){
             await patchPath(Path.join(path,pathFileOrDir));
         }));
     }else if(stats.isFile()){
@@ -50,13 +61,13 @@ export async function patchPath(path:string){
 
 export async function copyDir(src:string, dest:string, filter:(name:string)=>boolean){
     var dirs = await fs.readdir(src);
+    await fs.ensureDir(dest);
     while(dirs.length){
         var name = dirs.shift()!;
         var srcPath=Path.join(src, name);
         var destPath=Path.join(dest, name);
         var stat = await fs.stat(srcPath);
         if(stat.isDirectory()){
-            await fs.ensureDir(destPath);
             await copyDir(srcPath, destPath, filter);
         }else if(filter(name)){
             await fs.copyFile(srcPath, destPath);
