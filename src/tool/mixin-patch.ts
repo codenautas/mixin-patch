@@ -90,7 +90,7 @@ export async function patchProject(path:string){
             }
         }
     }
-    if(Array.isArray(packageJson.files)){
+    if((packageJson["mixin-patch"]?.patch===true || packageJson["mixin-patch"]?.patch == null) && Array.isArray(packageJson.files)){
         await Promise.all(packageJson.files.map(async function(element:string){
             let dirname = element.replace(/\/\*\*.*$/g,'');
             await patchPath(Path.join(path, dirname));
