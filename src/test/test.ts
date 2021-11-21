@@ -11,6 +11,8 @@ import * as discrepances from "discrepances";
 import { patchCodeDts, patchCodeJs, patchProject } from "../..";
 import * as Path from 'path';
 
+import { unexpected } from "cast-error";
+
 async function compareFiles(expectedFileName:string, obtainedFileName:string){
     var expected = await fs.readFile(expectedFileName,'utf8');
     var obtained = await fs.readFile(obtainedFileName,'utf8');
@@ -97,7 +99,8 @@ describe('copy codenautas dist', function(){
             await patchProject('local-project');
             throw new Error('must throw')
         }catch(err){
-            discrepances.showAndThrow(err.message,'Error in package.json in "files" entry. Can not find: local-project'+Path.sep+'inexisting');
+            var error = unexpected(err);
+            discrepances.showAndThrow(error.message,'Error in package.json in "files" entry. Can not find: local-project'+Path.sep+'inexisting');
         }
     });
 });

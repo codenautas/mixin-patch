@@ -14,6 +14,8 @@ var fs:typeof fsNative & {
 
 import * as Path from "path";
 
+import { unexpected } from "cast-error";
+
 export var badLineDetectorRegex=/^(        )([A-Za-z0-9_ö]+:\s*\((.|\s)*?\) => (.|\s)*?\);)$/mg;
 
 export function patchCodeDts(code:string){
@@ -42,10 +44,11 @@ export async function patchPath(path:string){
     try{
         var stats = await fs.stat(path);
     }catch(err){
-        if(err.code=='ENOENT'){
+        var error = unexpected(err)
+        if(error.code=='ENOENT'){
             throw new Error('Error in package.json in "files" entry. Can not find: '+path);
         }else{
-            throw err;
+            throw error;
         }
     }
     if(stats.isDirectory()){
@@ -90,8 +93,13 @@ export async function patchProject(path:string){
             }
         }
     }
-    if((packageJson["mixin-patch"]?.patch===true || packageJson["mixin-patch"]?.patch == null) && Array.isArray(packageJson.files)){
-        await Promise.all(packageJson.files.map(async function(element:string){
+    if((packageJson["mixin-patch"]?.patch===true 
+        || packageJson["mixin-patch"]?.patch == null
+        || packageJson["mixin-patch"]?.patch instanceof Array
+        ) && Array.isArray(packageJson.files)
+    ){
+        var files = packageJson["mixin-patch"]?.patch instanceof Array ? packageJson["mixin-patch"]?.patch : packageJson.files;
+        await Promise.all(files.map(async function(element:string){
             let dirname = element.replace(/\/\*\*.*$/g,'');
             await patchPath(Path.join(path, dirname));
         })); 
