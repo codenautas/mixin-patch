@@ -10,6 +10,7 @@ import * as fs from 'fs-extra';
 import * as discrepances from "discrepances";
 import { patchCodeDts, patchCodeJs, patchProject } from "../..";
 import * as Path from 'path';
+import * as jsYaml from 'js-yaml';
 
 import { unexpected } from "cast-error";
 
@@ -72,7 +73,8 @@ describe('copy codenautas dist', function(){
         await fs.writeFile('local-project/src/unlogged/img/cuatro.jpeg','cuatro')
         await fs.writeFile('local-project/src/unlogged/cinco.ts'       ,'cinco' )
         await fs.writeFile('local-project/src/unlogged/seis.js'        ,'"#!/bin/node yes";\nconsole.log("yes");\n')
-        await fs.writeJSON('local-project/package.json',{files:["dist"], "mixin-patch":true});
+        await fs.writeFile('local-project/local-config.yaml',jsYaml.dump({"mixin-patch":true}));
+        await fs.writeJSON('local-project/package.json',{files:["dist"]});
         await patchProject('local-project');
         await fs.writeFile('local-project/src/unlogged/seis.js'        ,'#!/bin/node yes\nconsole.log("yes");\n')
         await compareFiles('local-project/src/client/img/uno.png'      ,'local-project/dist/client/img/uno.png'      )
@@ -94,6 +96,7 @@ describe('copy codenautas dist', function(){
         await fs.writeFile('local-project/src/unlogged/img/tres.png'   ,'tres'  )
         await fs.writeFile('local-project/src/unlogged/img/cuatro.jpeg','cuatro')
         await fs.writeFile('local-project/src/unlogged/cinco.ts'       ,'cinco' )
+        await fs.writeFile('local-project/local-config.yaml',jsYaml.dump({others:false}));
         await fs.writeJSON('local-project/package.json',{files:["dist","inexisting"], "mixin-patch":true});
         try{
             await patchProject('local-project');

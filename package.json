@@ -1,7 +1,7 @@
 {
   "name": "mixin-patch",
   "description": "Patch the mixin problem #28799",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "author": "Emilio Platzer <emilioplatzer@gmail.com>",
   "license": "MIT",
   "files": [
@@ -19,26 +19,28 @@
     }
   ],
   "dependencies": {
-    "cast-error": "^0.1.0",
-    "fs-extra": "~11.1.1"
+    "best-globals": "^2.0.1",
+    "cast-error": "^0.1.2",
+    "fs-extra": "~11.3.1"
   },
   "devDependencies": {
-    "@types/express": "~4.17.17",
-    "@types/fs-extra": "~11.0.1",
-    "@types/js-yaml": "~4.0.5",
-    "@types/mocha": "~10.0.1",
-    "@types/node": "~18.16.0",
-    "@types/send": "~0.17.1",
-    "best-globals": "~1.1.0",
+    "@types/express": "~5.0.3",
+    "@types/fs-extra": "~11.0.4",
+    "@types/js-yaml": "~4.0.9",
+    "@types/mocha": "~10.0.10",
+    "@types/node": "~24.3.0",
+    "@types/send": "~0.17.5",
+    "best-globals": "~2.0.1",
     "colors": "~1.4.0",
-    "discrepances": "~0.2.8",
-    "mocha": "~10.2.0",
-    "nyc": "~15.1.0",
-    "sinon": "~15.0.4",
+    "discrepances": "~0.2.9",
+    "js-yaml": "^4.1.0",
+    "mocha": "~11.7.1",
+    "nyc": "~17.1.0",
+    "sinon": "~21.0.0",
     "source-map-support": "~0.5.21",
-    "supertest": "~6.3.3",
-    "ts-node": "~10.9.1",
-    "typescript": "~5.0.4"
+    "supertest": "~7.1.4",
+    "ts-node": "~10.9.2",
+    "typescript": "~5.9.2"
   },
   "main": "dist/mixin-patch.js",
   "types": "dist/mixin-patch.d.ts",

@@ -1,7 +1,7 @@
 {
   "files": [
-	"dist",
+    "dist",
     "other/**/*.js",
-	"one.txt"
+    "one.txt"
   ]
 }
