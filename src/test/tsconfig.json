@@ -1,9 +1,8 @@
 {
     "compilerOptions": {
         "outDir": "../../work/test",
-        "module": "none",
-        "target": "es2017",
-        "lib":["es2017", "es2015"]
+        "rootDir": ".",
+        "types": ["node", "mocha"]
     },
     "include":[
         "."

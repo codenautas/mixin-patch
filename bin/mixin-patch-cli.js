@@ -2,6 +2,9 @@
 
 "use strict";
 
-var patchProject = require('..').patchProject;
+import { patchProject } from '../dist/mixin-patch.js';
 
-patchProject(process.cwd());
+patchProject(process.cwd()).catch(function(err){
+    console.error(err);
+    process.exit(1);
+});

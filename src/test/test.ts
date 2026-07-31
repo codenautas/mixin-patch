@@ -6,9 +6,10 @@
 /* global describe */
 /* global it */
 
-import * as fs from 'fs-extra';
-import * as discrepances from "discrepances";
-import { patchCodeDts, patchCodeJs, patchProject } from "../..";
+import * as fs from 'fs/promises';
+import { existsSync } from 'fs';
+import discrepances from "discrepances";
+import { patchCodeDts, patchCodeJs, patchProject } from "../../dist/mixin-patch.js";
 import * as Path from 'path';
 import * as jsYaml from 'js-yaml';
 
@@ -42,10 +43,10 @@ describe('mixin-patch', function(){
         await compareFiles(`${PATH}/out-shebang-from-ts.js`,`${PATH}/local-shebang-from-ts.js`);
     });
     it('patch a project', async function(){
-        await fs.ensureDir(`${PATH}/src`)
-        await fs.copy(`${PATH}/in-app-datos-ext.d.ts`, `project4test/dist/server/app-datos-ext.d.ts`);
-        await fs.copy(`${PATH}/in-app-datos-ext.d.ts`, `project4test/other/app-datos-ext.d.ts`);
-        await fs.copy(`${PATH}/in-app-datos-ext.d.ts`, `project4test/none/app-datos-ext.d.ts`);
+        await fs.mkdir(`${PATH}/src`, {recursive:true})
+        await fs.cp(`${PATH}/in-app-datos-ext.d.ts`, `project4test/dist/server/app-datos-ext.d.ts`, {recursive:true});
+        await fs.cp(`${PATH}/in-app-datos-ext.d.ts`, `project4test/other/app-datos-ext.d.ts`, {recursive:true});
+        await fs.cp(`${PATH}/in-app-datos-ext.d.ts`, `project4test/none/app-datos-ext.d.ts`, {recursive:true});
         await patchProject('project4test');
         await compareFiles(`${PATH}/out-app-datos-ext.d.ts`, `project4test/dist/server/app-datos-ext.d.ts`);
         await compareFiles(`${PATH}/out-app-datos-ext.d.ts`, `project4test/other/app-datos-ext.d.ts`);
@@ -62,11 +63,11 @@ describe('mixin-patch', function(){
 
 describe('copy codenautas dist', function(){
     it('copies /src/client/** into /dist/client/**', async function(){
-        await fs.remove('local-project');
-        await fs.ensureDir('local-project/dist')
-        await fs.ensureDir('local-project/src/client/img')
-        await fs.ensureDir('local-project/src/client/css')
-        await fs.ensureDir('local-project/src/unlogged/img')
+        await fs.rm('local-project', {recursive:true, force:true});
+        await fs.mkdir('local-project/dist', {recursive:true})
+        await fs.mkdir('local-project/src/client/img', {recursive:true})
+        await fs.mkdir('local-project/src/client/css', {recursive:true})
+        await fs.mkdir('local-project/src/unlogged/img', {recursive:true})
         await fs.writeFile('local-project/src/client/img/uno.png'      ,'uno'   )
         await fs.writeFile('local-project/src/client/css/dos.styl'     ,'dos'   )
         await fs.writeFile('local-project/src/unlogged/img/tres.png'   ,'tres'  )
@@ -74,7 +75,7 @@ describe('copy codenautas dist', function(){
         await fs.writeFile('local-project/src/unlogged/cinco.ts'       ,'cinco' )
         await fs.writeFile('local-project/src/unlogged/seis.js'        ,'"#!/bin/node yes";\nconsole.log("yes");\n')
         await fs.writeFile('local-project/local-config.yaml',jsYaml.dump({"mixin-patch":true}));
-        await fs.writeJSON('local-project/package.json',{files:["dist"]});
+        await fs.writeFile('local-project/package.json',JSON.stringify({files:["dist"]}));
         await patchProject('local-project');
         await fs.writeFile('local-project/src/unlogged/seis.js'        ,'#!/bin/node yes\nconsole.log("yes");\n')
         await compareFiles('local-project/src/client/img/uno.png'      ,'local-project/dist/client/img/uno.png'      )
@@ -82,22 +83,22 @@ describe('copy codenautas dist', function(){
         await compareFiles('local-project/src/unlogged/img/tres.png'   ,'local-project/dist/unlogged/img/tres.png'   )
         await compareFiles('local-project/src/unlogged/img/cuatro.jpeg','local-project/dist/unlogged/img/cuatro.jpeg')
         await compareFiles('local-project/src/unlogged/seis.js'        ,'local-project/dist/unlogged/seis.js'        )
-        var exists = fs.existsSync('local-project/dist/unlogged/cinco.ts');
+        var exists = existsSync('local-project/dist/unlogged/cinco.ts');
         discrepances.showAndThrow(exists, false);
     });
     it('inform inexisting path in "files" entry', async function(){
-        await fs.remove('local-project');
-        await fs.ensureDir('local-project/dist')
-        await fs.ensureDir('local-project/src/client/img')
-        await fs.ensureDir('local-project/src/client/css')
-        await fs.ensureDir('local-project/src/unlogged/img')
+        await fs.rm('local-project', {recursive:true, force:true});
+        await fs.mkdir('local-project/dist', {recursive:true})
+        await fs.mkdir('local-project/src/client/img', {recursive:true})
+        await fs.mkdir('local-project/src/client/css', {recursive:true})
+        await fs.mkdir('local-project/src/unlogged/img', {recursive:true})
         await fs.writeFile('local-project/src/client/img/uno.png'      ,'uno'   )
         await fs.writeFile('local-project/src/client/css/dos.styl'     ,'dos'   )
         await fs.writeFile('local-project/src/unlogged/img/tres.png'   ,'tres'  )
         await fs.writeFile('local-project/src/unlogged/img/cuatro.jpeg','cuatro')
         await fs.writeFile('local-project/src/unlogged/cinco.ts'       ,'cinco' )
         await fs.writeFile('local-project/local-config.yaml',jsYaml.dump({others:false}));
-        await fs.writeJSON('local-project/package.json',{files:["dist","inexisting"], "mixin-patch":true});
+        await fs.writeFile('local-project/package.json',JSON.stringify({files:["dist","inexisting"], "mixin-patch":true}));
         try{
             await patchProject('local-project');
             throw new Error('must throw')

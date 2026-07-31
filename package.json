@@ -20,42 +20,35 @@
   ],
   "dependencies": {
     "best-globals": "^2.0.1",
-    "cast-error": "^0.1.2",
-    "fs-extra": "~11.3.1"
+    "cast-error": "^0.1.5"
   },
   "devDependencies": {
-    "@types/express": "~5.0.3",
-    "@types/fs-extra": "~11.0.4",
     "@types/js-yaml": "~4.0.9",
     "@types/mocha": "~10.0.10",
-    "@types/node": "~24.3.0",
-    "@types/send": "~0.17.5",
-    "best-globals": "~2.0.1",
-    "colors": "~1.4.0",
-    "discrepances": "~0.2.9",
-    "js-yaml": "^4.1.0",
-    "mocha": "~11.7.1",
-    "nyc": "~17.1.0",
-    "sinon": "~21.0.0",
+    "@types/node": "~26.1.2",
+    "best-globals": "~2.2.2",
+    "discrepances": "~0.2.14",
+    "js-yaml": "^5.2.2",
+    "mocha": "~11.7.6",
+    "c8": "~12.0.0",
     "source-map-support": "~0.5.21",
-    "supertest": "~7.1.4",
-    "ts-node": "~10.9.2",
-    "typescript": "~5.9.2"
+    "typescript": "~7.0.2"
   },
+  "type": "module",
   "main": "dist/mixin-patch.js",
   "types": "dist/mixin-patch.d.ts",
   "engines": {
-    "node": ">= 10"
+    "node": ">= 22"
   },
   "scripts": {
     "tsc": "tsc",
     "test": "npm run prepare && mocha --reporter spec --bail --check-leaks --exit work/test/",
-    "test-ci": "node node_modules/nyc/bin/nyc --reporter=lcov --reporter=text-lcov node_modules/mocha/bin/_mocha --exit --check-leaks work/test/*.js",
-    "test-cov": "nyc node_modules/mocha/bin/_mocha --exit --check-leaks work/test/*.js",
+    "test-ci": "c8 --reporter=lcov --reporter=text-lcov mocha --exit --check-leaks work/test/*.js",
+    "test-cov": "c8 mocha --exit --check-leaks work/test/*.js",
     "prepare": "tsc -p tsconfig-tool.json && tsc -p tsconfig-test.json",
     "build-without-err": "(tsc -p tsconfig-tool.json || echo \"continue w/error\") && (tsc -p tsconfig-test.json  || echo \"continue w/error\")"
   },
-  "nyc": {
+  "c8": {
     "extension": [
       ".js"
     ],
@@ -66,16 +59,11 @@
     "include": [
       "dist/**/*.js"
     ],
-    "x-require": [
-      "ts-node/register"
-    ],
     "reporter": [
       "html",
       "lcov",
       "text-summary"
     ],
-    "sourceMap": true,
-    "instrument": true,
     "all": true,
     "check-coverage": true
   },

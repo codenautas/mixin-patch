@@ -1,8 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "../../dist",
-        "module": "none",
-        "lib": ["es2019"]
+        "rootDir": "."
     },
     "include":[
         "."
