@@ -1,0 +1,26 @@
+root = true
+
+# Defaults for every file
+[*]
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+
+[src/test/fixtures/in-bug-found.d.ts]
+trim_trailing_whitespace = false
+
+[src/test/fixtures/in-shebang-from-ts.js]
+insert_final_newline = false
+
+[src/test/fixtures/in-shebang.js]
+insert_final_newline = false
+
+[src/test/fixtures/out-bug-found.d.ts]
+trim_trailing_whitespace = false
+
+[src/test/fixtures/out-shebang-from-ts.js]
+insert_final_newline = false
+
+[src/test/fixtures/out-shebang.js]
+insert_final_newline = false

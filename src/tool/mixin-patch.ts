@@ -110,7 +110,7 @@ export async function patchProject(path:string){
             }
         }
     }
-    if((config["mixin-patch"]?.patch===true 
+    if((config["mixin-patch"]?.patch===true
         || config["mixin-patch"]?.patch == null
         || config["mixin-patch"]?.patch instanceof Array
         ) && Array.isArray(config.files)
@@ -119,7 +119,6 @@ export async function patchProject(path:string){
         await Promise.all(files.map(async function(element:string){
             let dirname = element.replace(/\/\*\*.*$/g,'');
             await patchPath(Path.join(path, dirname));
-        })); 
+        }));
     }
 }
-

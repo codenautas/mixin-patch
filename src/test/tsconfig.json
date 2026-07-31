@@ -6,6 +6,6 @@
     },
     "include":[
         "."
-    ], 
+    ],
     "extends": "../../tsconfig-common.json"
 }

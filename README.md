@@ -11,12 +11,12 @@ Support for Mix-in classes](https://www.typescriptlang.org/docs/handbook/release
 
 ## secondary goal
 Copy files from known positions (i.e. `/src/**`) to public positions (i.e. `/dist/client`) in a controlated way.
-Never copies .ts files. 
+Never copies .ts files.
 
 ## usage
   * include in `package.json ⟶ devDependencies`
   * add `& mixin-patch` at the end of the `"build"` script (for example: `"build": "tsc & mixin-patch"`)
-  * turn on options in `package.json` `mixin-patch` property. 
+  * turn on options in `package.json` `mixin-patch` property.
 
 ## mixin-patch
 Mixin-patch patch all of `.d.ts` with these steps:
@@ -54,4 +54,3 @@ In package.json `mixin-path` can have the value `true` for getting all the defau
 
 ## license
    * MIT
-
