@@ -44,8 +44,7 @@
   "scripts": {
     "tsc": "tsc",
     "test": "npm run prepare && mocha --reporter spec --bail --check-leaks --exit work/test/",
-    "test-ci": "c8 --reporter=lcov --reporter=text-lcov mocha --exit --check-leaks work/test/*.js",
-    "test-cov": "c8 mocha --exit --check-leaks work/test/*.js",
+    "test-ci": "npm run prepare && c8 mocha --exit --check-leaks work/test/*.js",
     "prepare": "tsc -p tsconfig-tool.json && tsc -p tsconfig-test.json",
     "build-without-err": "(tsc -p tsconfig-tool.json || echo \"continue w/error\") && (tsc -p tsconfig-test.json  || echo \"continue w/error\")"
   },
@@ -66,7 +65,11 @@
       "text-summary"
     ],
     "all": true,
-    "check-coverage": true
+    "check-coverage": true,
+    "lines": 80,
+    "branches": 80,
+    "functions": 80,
+    "statements": 80
   },
   "qa-control": {
     "run-in": "server",
