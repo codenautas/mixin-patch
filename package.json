@@ -11,7 +11,7 @@
   "bin": {
     "mixin-patch": "./bin/mixin-patch-cli.js"
   },
-  "repository": "emilioplatzer/mixin-patch",
+  "repository": "codenautas/mixin-patch",
   "contributors": [
     {
       "name": "Emilio Platzer",
