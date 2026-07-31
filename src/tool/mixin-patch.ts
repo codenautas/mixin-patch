@@ -10,7 +10,7 @@ import * as Path from "path";
 import bestGlobals from "best-globals"
 const { changing } = bestGlobals;
 
-import { unexpected } from "cast-error";
+import { expected } from "cast-error";
 
 export var badLineDetectorRegex=/^(        )([A-Za-z0-9_ö]+:\s*\((.|\s)*?\) => (.|\s)*?\);)$/mg;
 
@@ -40,7 +40,7 @@ export async function patchPath(path:string){
     try{
         var stats = await fs.stat(path);
     }catch(err){
-        var error = unexpected(err)
+        var error = expected(err)
         if(error.code=='ENOENT'){
             throw new Error('Error in package.json in "files" entry. Can not find: '+path);
         }else{
@@ -78,7 +78,7 @@ export async function readLocalConfig(path:string){
     try{
         var content = await fs.readFile(Path.join(path,'local-config.yaml'), 'utf-8');
     }catch(err){
-        var error = unexpected(err)
+        var error = expected(err)
         if(error.code=='ENOENT'){
             return {};
         }else{
