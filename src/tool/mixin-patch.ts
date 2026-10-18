@@ -97,7 +97,7 @@ export async function patchProject(path:string){
     let packageJson = JSON.parse(await fs.readFile(Path.join(path,'package.json'), 'utf-8'));
     let localConfig = await readLocalConfig(path) as any
     let config = changing(localConfig, packageJson);
-    if(config.files.includes("dist") && (config["qa-control"] || config["mixin-patch"])){
+    if((config.files.includes("dist") || config["mixin-patch"]?.copy?.length) && (config["qa-control"] || config["mixin-patch"])){
         var copyList = config["mixin-patch"]?.copy
         if(existsSync(Path.join(path,"src")) || copyList){
             for(var pair of (copyList || [{from:'src', to:'dist'}])){

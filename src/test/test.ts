@@ -86,6 +86,37 @@ describe('copy codenautas dist', function(){
         var exists = existsSync('local-project/dist/unlogged/cinco.ts');
         discrepances.showAndThrow(exists, false);
     });
+    it('copies with explicit copy list into lib without dist in "files"', async function(){
+        await fs.rm('local-project', {recursive:true, force:true});
+        await fs.mkdir('local-project/src/client/img', {recursive:true})
+        await fs.writeFile('local-project/src/client/img/uno.png'      ,'uno'   )
+        await fs.writeFile('local-project/src/client/cinco.ts'         ,'cinco' )
+        await fs.writeFile('local-project/package.json',JSON.stringify({files:["lib"], "mixin-patch":{copy:[{from:"src", to:"lib"}]}}));
+        await patchProject('local-project');
+        await compareFiles('local-project/src/client/img/uno.png'      ,'local-project/lib/client/img/uno.png'       )
+        discrepances.showAndThrow(existsSync('local-project/lib/client/cinco.ts'), false);
+        discrepances.showAndThrow(existsSync('local-project/dist'), false);
+    });
+    it('copies /src into /dist by default with qa-control and without mixin-patch', async function(){
+        await fs.rm('local-project', {recursive:true, force:true});
+        await fs.mkdir('local-project/src/client/img', {recursive:true})
+        await fs.writeFile('local-project/src/client/img/uno.png'      ,'uno'   )
+        await fs.writeFile('local-project/src/client/cinco.ts'         ,'cinco' )
+        await fs.writeFile('local-project/package.json',JSON.stringify({files:["dist"], "qa-control":{type:"lib"}}));
+        await patchProject('local-project');
+        await compareFiles('local-project/src/client/img/uno.png'      ,'local-project/dist/client/img/uno.png'      )
+        discrepances.showAndThrow(existsSync('local-project/dist/client/cinco.ts'), false);
+    });
+    it('copies /src into /dist by default with mixin-patch object without copy', async function(){
+        await fs.rm('local-project', {recursive:true, force:true});
+        await fs.mkdir('local-project/src/client/img', {recursive:true})
+        await fs.writeFile('local-project/src/client/img/uno.png'      ,'uno'   )
+        await fs.writeFile('local-project/src/client/cinco.ts'         ,'cinco' )
+        await fs.writeFile('local-project/package.json',JSON.stringify({files:["dist"], "mixin-patch":{patch:["dist"]}}));
+        await patchProject('local-project');
+        await compareFiles('local-project/src/client/img/uno.png'      ,'local-project/dist/client/img/uno.png'      )
+        discrepances.showAndThrow(existsSync('local-project/dist/client/cinco.ts'), false);
+    });
     it('inform inexisting path in "files" entry', async function(){
         await fs.rm('local-project', {recursive:true, force:true});
         await fs.mkdir('local-project/dist', {recursive:true})
