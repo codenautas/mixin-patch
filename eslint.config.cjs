@@ -1,8 +1,16 @@
 "use strict";
 
+const tseslint = require("typescript-eslint");
+
 module.exports = [
     {
-        ignores: ["dist/**", "src/test/fixtures/**", "work/**", "coverage/**"]
+        ignores: ["dist/**", "src/test/fixtures/**", "work/**", "coverage/**", "local-project/**", "project4test/**"]
+    },
+    {
+        files: ["**/*.ts"],
+        languageOptions: {
+            parser: tseslint.parser
+        }
     },
     {
         languageOptions: {

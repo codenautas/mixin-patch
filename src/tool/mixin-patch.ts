@@ -1,5 +1,3 @@
-"use strict";
-
 import * as fs from "fs/promises";
 import { existsSync } from "fs";
 
@@ -12,7 +10,7 @@ const { changing } = bestGlobals;
 
 import { expected } from "cast-error";
 
-export var badLineDetectorRegex=/^(        )([A-Za-z0-9_ö]+:\s*\((.|\s)*?\) => (.|\s)*?\);)$/mg;
+export var badLineDetectorRegex=/^( {8})([A-Za-z0-9_ö]+:\s*\((.|\s)*?\) => (.|\s)*?\);)$/mg;
 
 export function patchCodeDts(code:string){
     return code.replace(badLineDetectorRegex, function(_all, margin, rest ){
@@ -30,7 +28,7 @@ export async function patchIfNeeded(sufix:string, path:string, patcher:(code:str
     if(path.endsWith(sufix)){
         let readedCode = await fs.readFile(path, 'utf8');
         let patchedCode = patcher(readedCode);
-        if(readedCode!=patchedCode){
+        if (readedCode !== patchedCode) {
             await fs.writeFile(path, patchedCode);
         }
     }
@@ -41,9 +39,9 @@ export async function patchPath(path:string){
         var stats = await fs.stat(path);
     }catch(err){
         var error = expected(err)
-        if(error.code=='ENOENT'){
+        if (error.code === 'ENOENT') {
             throw new Error('Error in package.json in "files" entry. Can not find: '+path);
-        }else{
+        } else {
             throw error;
         }
     }
@@ -79,21 +77,21 @@ export async function readLocalConfig(path:string){
         var content = await fs.readFile(Path.join(path,'local-config.yaml'), 'utf-8');
     }catch(err){
         var error = expected(err)
-        if(error.code=='ENOENT'){
+        if (error.code === 'ENOENT') {
             return {};
-        }else{
+        } else {
             throw error;
         }
     }
     // js-yaml considera error un documento vacío (o sólo con espacios o comentarios)
     // pero para local-config.yaml eso equivale a que no haya configuración.
-    if(content.replace(/#.*$/mg,'').trim()==''){
+    if(content.replace(/#.*$/mg,'').trim() == ''){  // eslint-disable-line eqeqeq
         return {};
     }
     return jsYaml.load(content) ?? {};
 }
 
-export async function patchProject(path:string){
+export async function patchProject(path:string){ // eslint-disable-line complexity
     let packageJson = JSON.parse(await fs.readFile(Path.join(path,'package.json'), 'utf-8'));
     let localConfig = await readLocalConfig(path) as any
     let config = changing(localConfig, packageJson);
@@ -102,7 +100,7 @@ export async function patchProject(path:string){
         if(existsSync(Path.join(path,"src")) || copyList){
             for(var pair of (copyList || [{from:'src', to:'dist'}])){
                 try{
-                    await copyDir(Path.join(path,pair.from), Path.join(path,pair.to), function filter(dir){ return !dir.endsWith('.ts') && dir!='config.json'});
+                    await copyDir(Path.join(path,pair.from), Path.join(path,pair.to), function filter(dir){ return !dir.endsWith('.ts') && dir !== 'config.json'});
                 }catch(err){
                     console.log('mixin-patch. ERROR copying',Path.join(path,pair.from),'to', Path.join(path,pair.to));
                     throw err;

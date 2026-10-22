@@ -1,11 +1,3 @@
-"use strict";
-/*jshint eqnull:true */
-/*jshint globalstrict:true */
-/*jshint node:true */
-/*eslint-env node*/
-/* global describe */
-/* global it */
-
 import * as fs from 'fs/promises';
 import { existsSync } from 'fs';
 import discrepances from "discrepances";
